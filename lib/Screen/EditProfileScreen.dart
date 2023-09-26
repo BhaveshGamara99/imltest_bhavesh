@@ -1,5 +1,8 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:imltest_bhavesh/Screen/HomeScreen.dart';
 
 class EditProfileScreen extends StatefulWidget {
@@ -14,8 +17,26 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _skillsController = TextEditingController();
   final TextEditingController _workEXPdController = TextEditingController();
+  late File imageFile = File("assets/images/profile.png");
 
+  _getFromGallery() async {
+    try {
+      XFile? pickedFile = await ImagePicker().pickImage(
+        source: ImageSource.gallery,
+        maxWidth: 1800,
+        maxHeight: 1800,
+      );
+      if (pickedFile != null) {
+        setState(() {
+          imageFile = File(pickedFile.path);
+        });
+      }
+    } catch (e) {
+      // Handle the exception, e.g., show an error message.
+      print('Error loading image: $e');
+    }
 
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -29,12 +50,17 @@ automaticallyImplyLeading: true,
               child: Column(
                 children: [
                   Text("Edit Profile",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 22)),
+
                   SizedBox(height: 10,),
-                  Stack(children: [
-                    ClipRRect(child: Image.asset("assets/images/profile.png",fit: BoxFit.fill,height: 100,width: 100,),
+                  Stack( children: [
+                    ClipRRect(child: imageFile == null ?  Image.asset("assets/images/profile.png",fit: BoxFit.fill,height: 100,width: 100,) :Image.file(imageFile,fit: BoxFit.fill,height: 100,width: 100),
                       borderRadius:  BorderRadius.circular(50),
                     ),
-                    Positioned(child: Icon(Icons.edit,color: Colors.white,size: 50,),right: 20,top: 20,),
+                    Positioned(child: InkWell(
+                      onTap: (){
+                          _getFromGallery();
+                      },
+                        child: Icon(Icons.edit,color: Colors.white,size: 50,)),right: 20,top: 20,),
 
 
                   ],),
@@ -91,7 +117,8 @@ automaticallyImplyLeading: true,
                     width: 250,
                     height: 50,
                     child: ElevatedButton(onPressed: (){
-                      Get.to(HomeScreen());
+
+                      Get.to(HomeScreen(name: _nameController.text.toString(),email: _emailController.text.toString(), exp: _workEXPdController.text.toString(),skills: _skillsController.text.toString(),));
                     }, child: Text("Save",style: TextStyle(color: Colors.white,fontSize: 34),),
                       style: ElevatedButton.styleFrom(
                         primary: Colors.purple.withOpacity(0.8),
@@ -100,11 +127,17 @@ automaticallyImplyLeading: true,
 
                     ),
                   ),
+
+
+
+
                 ],
               ),
             ),
           ),
         ),
     );
+
   }
+
 }

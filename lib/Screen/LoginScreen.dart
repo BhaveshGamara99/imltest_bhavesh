@@ -2,6 +2,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:imltest_bhavesh/Screen/HomeScreen.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+
+import '../Controllers/auth_controller.dart';
+
 
 
 class LoginScreen extends StatefulWidget {
@@ -21,8 +25,12 @@ class _LoginScreenState extends State<LoginScreen> {
     });
   }
 
-  final TextEditingController _emailController = TextEditingController();
-  final TextEditingController _passwordController = TextEditingController();
+
+
+  final emailController = TextEditingController();
+  final passwordController = TextEditingController();
+// controller
+
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width * 1;
@@ -66,10 +74,12 @@ class _LoginScreenState extends State<LoginScreen> {
               ),
               SizedBox(height: height * 0.25,),
               Text("Login",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 22),),
+
               SizedBox(height:10),
               TextFormField(
-                controller: _emailController,
-                decoration: const InputDecoration(
+                controller: emailController,
+                decoration:  InputDecoration(
+
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.all(Radius.circular(16),),
                     borderSide: BorderSide(width: 5),
@@ -80,7 +90,7 @@ class _LoginScreenState extends State<LoginScreen> {
               ),
               SizedBox(height:10),
               TextFormField(
-                controller: _passwordController,
+                controller: passwordController,
                 decoration:  InputDecoration(
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.all(Radius.circular(16),),
@@ -119,7 +129,14 @@ class _LoginScreenState extends State<LoginScreen> {
                 height: 50,
                 child: ElevatedButton(onPressed: () async{
 
-                  Get.to(HomeScreen());
+
+ // Get.to(HomeScreen());
+  AuthController.authInstance.login(
+    emailController.text.trim(),
+    passwordController.text.trim(),
+  );
+
+
                 }, child: Text("Sign in",style: TextStyle(color: Colors.white,fontSize: 34),),
                   style: ElevatedButton.styleFrom(
                     primary: Colors.purple.withOpacity(0.8),

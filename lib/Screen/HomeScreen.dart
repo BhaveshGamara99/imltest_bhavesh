@@ -3,17 +3,38 @@ import 'package:get/get.dart';
 import 'package:imltest_bhavesh/Screen/EditProfileScreen.dart';
 import 'package:imltest_bhavesh/Screen/LoginScreen.dart';
 
+import '../Controllers/auth_controller.dart';
+
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
+
+   String name,email,exp,skills;
+
+
+  HomeScreen({required this.name, required this.email, required this.exp,required this.skills});
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  List<String> _skills = ["Swift", "Dart", "C++"];
+  List<String> skills = ["Swift,Dart,C++"];
+  List<String> words = [];
+
+  void _convertWordsToWidgets() {
+    setState(() {
+      words = widget.skills.split(',');
+
+    });
+  }
+@override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _convertWordsToWidgets();
+  }
   @override
   Widget build(BuildContext context) {
+
     double width = MediaQuery.of(context).size.width * 1;
     double height = MediaQuery.of(context).size.height * 1;
     return Scaffold(
@@ -52,7 +73,43 @@ class _HomeScreenState extends State<HomeScreen> {
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 10),
                 child: InkWell(onTap: (){
-                  Get.to(LoginScreen());
+
+
+                  Widget cancelButton = TextButton(
+                    child: Text("Cancel"),
+                    onPressed:  () {
+                      Get.back();
+                    },
+                  );
+                  Widget continueButton = TextButton(
+                    child: Text("Logout"),
+                    onPressed:  () {
+                      AuthController.authInstance.signOut();
+                      Get.to(LoginScreen());
+                    },
+                  );
+
+                  // set up the AlertDialog
+                  AlertDialog alert = AlertDialog(
+                    title: Text("AlertDialog"),
+                    content: Text("Are you sure you want to :ogout"),
+                    actions: [
+                      cancelButton,
+                      continueButton,
+                    ],
+                  );
+
+                  // show the dialog
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return alert;
+                    },
+                  );
+
+
+
+
                 },
                 child: Icon(Icons.logout)),
               ),
@@ -73,71 +130,23 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                   SizedBox(height: 20,),
                   Text("Name:",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 22,color: Colors.purple)),
-                  Text("Developer",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 22,)),
+                  SizedBox(height: 10,),
+                  Text(widget.name.isNotEmpty ? widget.name : "Devloper",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 22,)),
+                  SizedBox(height: 10,),
                   Text("Email:",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 22,color: Colors.purple)),
-                  Text("Developer@gmail.com",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 22,)),
+                  SizedBox(height: 10,),
+                  Text(widget.email.isNotEmpty ? widget.email:"bhavesh123@gmail.com",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 22,)),
                   SizedBox(height: 10,),
                   Text("Skills:",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 22,color: Colors.purple)),
                   SizedBox(height: 10,),
-                  Row(mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      Container(
-                        child: Padding(
-                          padding: const EdgeInsets.all(10),
-                          child: Text("JAVA",style:TextStyle(color: Colors.white),),
-                        ),
-                          decoration: const BoxDecoration(
-                              gradient: LinearGradient(
-                                begin: Alignment.topRight,
-                                end: Alignment.bottomLeft,
-                                colors: [
-                                  Colors.yellow,
-                                  Colors.purple,
-                                ],
-                              ),
-                              borderRadius: BorderRadius.all(Radius.circular(20))
-                              )),
-                      Container(
-                          child: Padding(
-                            padding: const EdgeInsets.all(10),
-                            child: Text("JAVA",style:TextStyle(color: Colors.white),),
-                          ),
-                          decoration: const BoxDecoration(
-                              gradient: LinearGradient(
-                                begin: Alignment.topRight,
-                                end: Alignment.bottomLeft,
-                                colors: [
-                                  Colors.yellow,
-                                  Colors.purple,
-                                ],
-                              ),
-                              borderRadius: BorderRadius.all(Radius.circular(20))
-                          )),
-                      Container(
-                          child: Padding(
-                            padding: const EdgeInsets.all(10),
-                            child: Text("JAVA",style:TextStyle(color: Colors.white),),
-                          ),
-                          decoration: const BoxDecoration(
-                              gradient: LinearGradient(
-                                begin: Alignment.topRight,
-                                end: Alignment.bottomLeft,
-                                colors: [
-                                  Colors.yellow,
-                                  Colors.purple,
-                                ],
-                              ),
-                              borderRadius: BorderRadius.all(Radius.circular(20))
-                          )),
+                  Wrap(
+                    spacing: 8, // Adjust the spacing between Text widgets as needed
+                    children: words.map((word) {
 
-                  ],),
-                  SizedBox(height: 10,),
-                  Row(mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      Container(
+                      return Container(
                           child: Padding(
                             padding: const EdgeInsets.all(10),
-                            child: Text("JAVA",style:TextStyle(color: Colors.white),),
+                            child: Text(word.trim().isNotEmpty ? word.trim() : word = skills.first ,style:TextStyle(color: Colors.white),),
                           ),
                           decoration: const BoxDecoration(
                               gradient: LinearGradient(
@@ -149,44 +158,14 @@ class _HomeScreenState extends State<HomeScreen> {
                                 ],
                               ),
                               borderRadius: BorderRadius.all(Radius.circular(20))
-                          )),
-                      Container(
-                          child: Padding(
-                            padding: const EdgeInsets.all(10),
-                            child: Text("JAVA",style:TextStyle(color: Colors.white),),
-                          ),
-                          decoration: const BoxDecoration(
-                              gradient: LinearGradient(
-                                begin: Alignment.topRight,
-                                end: Alignment.bottomLeft,
-                                colors: [
-                                  Colors.yellow,
-                                  Colors.purple,
-                                ],
-                              ),
-                              borderRadius: BorderRadius.all(Radius.circular(20))
-                          )),
-                      Container(
-                          child: Padding(
-                            padding: const EdgeInsets.all(10),
-                            child: Text("JAVA",style:TextStyle(color: Colors.white),),
-                          ),
-                          decoration: const BoxDecoration(
-                              gradient: LinearGradient(
-                                begin: Alignment.topRight,
-                                end: Alignment.bottomLeft,
-                                colors: [
-                                  Colors.yellow,
-                                  Colors.purple,
-                                ],
-                              ),
-                              borderRadius: BorderRadius.all(Radius.circular(20))
-                          )),
-
-                    ],),
+                          ));
+                    }).toList(),
+                  ),
                   SizedBox(height: 10,),
                   Text("Work Experiencr:",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 22,color: Colors.purple)),
-                  Text("1+ Year",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 22,)),
+                  SizedBox(height: 10,),
+                  Text(widget.exp.isNotEmpty ? widget.exp : "1+",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 22,)),
+                  SizedBox(height: 40,),
                   Center(
                     child: Container(
                       width: 250,
@@ -210,19 +189,7 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ),
           ),
-          // Container(height: double.infinity,width: double.infinity,
-          //   child: Expanded(
-          //     child: ListView.builder(
-          //       scrollDirection: Axis.horizontal,
-          //       itemCount: _skills.length,
-          //       itemBuilder: (BuildContext context, int index) {
-          //         return Container(
-          //           child: Text(_skills[index]),
-          //         );
-          //       },
-          //     ),
-          //   ),
-          // ),
+
         ],
       ),
     );
