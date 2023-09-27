@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "861894864959",
+    "project_id": "iml-projecttest",
+    "storage_bucket": "iml-projecttest.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:861894864959:android:4ddd47943554e39dcec88a",
+        "android_client_info": {
+          "package_name": "com.example.imltest_bhavesh"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB1WdR5nJB0Kr9bK65ztUpDBzQrWdOghPc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
